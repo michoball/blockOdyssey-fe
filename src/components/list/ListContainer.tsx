@@ -1,21 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Product } from "../../api/productService";
 import { selectProducts } from "../../features/product/productSlice";
-// import { products } from "../../dummy";
-import useProductQuery from "../../hooks/queries/useGetProductQuery";
 import Pagination from "../pagination/Pagination";
-import List from "./List";
+import ListView from "./ListView";
+
 import "./ListContainer.styles.scss";
 
 const ListContainer = () => {
-  const { useGetAllProductQuery } = useProductQuery();
-  const { isLoading } = useGetAllProductQuery();
-  const { total } = useSelector(selectProducts);
+  const products = useSelector(selectProducts);
+
+  const [setProducts, setSetProducts] = useState<Product[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPageValue, setPerPageValue] = useState(10);
+
+  const perPageHandler = (perPage: number) => {
+    setPerPageValue(perPage);
+    // 전체 데이터 수 / 페이지 당 행의 수 가 현재 페이지보다 크면 현재 페이지 값 조정
+    const lastPageNumber = Math.ceil(setProducts.length / perPage);
+    if (lastPageNumber < currentPage) {
+      setCurrentPage(lastPageNumber);
+    }
+  };
+
+  //현재 페이지에 보여질 product 배열
+  const currentPageProducts = setProducts?.slice(
+    currentPage * perPageValue - perPageValue,
+    currentPage * perPageValue
+  );
+
+  useEffect(() => {
+    if (products) setSetProducts(products);
+  }, [products]);
 
   return (
     <>
       <article className="searched-data">
-        <p>검색된 데이터 : {total} 건</p>
+        <p>검색된 데이터 : {products.length} 건</p>
       </article>
       <section className="List-container">
         <div className="list-header">
@@ -41,31 +62,13 @@ const ListContainer = () => {
             <span>재고</span>
           </div>
         </div>
-
-        <div className="list-view">
-          {isLoading ? (
-            <li>loading...</li>
-          ) : (
-            <>
-              <div>data fetched</div>
-              {/* {allProducts.products.map((product) => {
-              return (
-                <List
-                  key={product.title}
-                  productTitle={product.title}
-                  productId={product.id}
-                  brand={product.brand}
-                  description={product.description}
-                  price={product.price}
-                  rating={product.rating}
-                  stock={product.stock}
-                />
-              );
-            })} */}
-            </>
-          )}
-        </div>
-        <Pagination />
+        <ListView pagePerProducts={currentPageProducts} />
+        <Pagination
+          setPage={setCurrentPage}
+          page={currentPage}
+          setPerPageHandler={perPageHandler}
+          perPage={perPageValue}
+        />
       </section>
     </>
   );

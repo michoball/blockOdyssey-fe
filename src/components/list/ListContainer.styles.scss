@@ -32,21 +32,14 @@
       width: 20%;
       text-align: center;
       &:first-child {
-        width: 9%;
+        width: 8%;
       }
       &.desc {
-        width: 30%;
+        width: 31%;
       }
       &:nth-child(n + 5) {
         width: 7%;
       }
     }
   }
-}
-
-.list-view {
-  height: calc(100% - 140px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
