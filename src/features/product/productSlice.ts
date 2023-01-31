@@ -1,44 +1,38 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IProducts, Product } from "../../api/productService";
 import { RootState } from "../../app/store";
-
-interface Product {
-  id: number;
-  title: string;
-  brand: string;
-  description: string;
-  price: number;
-  rating: number;
-  stock: number;
-  category: string;
-  thumbnail: string;
-  images: string[];
-}
 
 interface ProductState {
   total: number;
   products: Product[];
-  limit: number;
 }
 
 export const initialState: ProductState = {
   total: 0,
   products: [],
-  limit: 0,
 };
 
 export const ProductSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    setProducts: (state, action: PayloadAction<ProductState>) => {
+    setProducts: (state, action: PayloadAction<IProducts>) => {
       state.total = action.payload.total;
       state.products = action.payload.products;
-      state.limit = action.payload.limit;
     },
   },
 });
 
-export const { setProducts } = ProductSlice.actions;
-export const selectProducts = (state: RootState) => state.products;
+const selectProductsReducer = (state: RootState) => state.products;
 
+export const selectProducts = createSelector(
+  [selectProductsReducer],
+  (products) => products.products
+);
+export const selectTotalProductCount = createSelector(
+  [selectProductsReducer],
+  (products) => products.total
+);
+
+export const { setProducts } = ProductSlice.actions;
 export default ProductSlice.reducer;
