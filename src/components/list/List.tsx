@@ -47,7 +47,7 @@ const List: React.FC<ListProps> = ({
       <span className="brand">{brand}</span>
       {/* 상품 내용은 40글자가 넘으면 ...으로 표현 css 에서 ellipsis적용 */}
       <span className="description">
-        <div ref={descriptionRef}>{description}</div>
+        <div ref={descriptionRef}>{description.slice(0, 40)}</div>
       </span>
       <span className="price">${price}</span>
       <span className="rating">{rating}</span>
