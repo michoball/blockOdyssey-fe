@@ -19,8 +19,8 @@ const Pagination: React.FC<PaginationProps> = ({
   setPerPageHandler,
   perPage,
 }) => {
-  const total = useSelector(selectTotalProductCount);
-  const numberOfButton = Math.ceil(total / perPage);
+  const productsCount = useSelector(selectTotalProductCount);
+  const numberOfButton = Math.ceil(productsCount / perPage);
 
   const pageNumbers = Array.from({ length: numberOfButton }, (_, i) => i + 1);
 
@@ -30,6 +30,8 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const pageNumberClickHandler = (pageNumber: number) => {
     setPage(pageNumber);
+    // 입력된 pageNumber url에 넣기
+    // ex) localhost:3000?여기에 search가 와야할듯/:pageNumber?pagePerRow=10
   };
 
   return (
@@ -66,7 +68,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           className="right-arrow"
           onClick={() => setPage((prev) => prev + 1)}
-          disabled={page * perPage >= total}
+          disabled={page * perPage >= productsCount}
         >
           &#10095;
         </button>
