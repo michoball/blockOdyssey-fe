@@ -30,7 +30,12 @@ const ListContainer = () => {
   );
 
   useEffect(() => {
-    if (products) setSetProducts(products);
+    if (products) {
+      // searchParams에 searchTerm이 있는지 확인하고 있으면 searchTerm의 값으로 search action 실행
+      // 없으면 밑에처럼 진행
+      setSetProducts(products);
+      setCurrentPage(1);
+    }
   }, [products]);
 
   return (
