@@ -1,26 +1,75 @@
-import React from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { useSelector } from "react-redux";
+import { selectTotalProductCount } from "../../features/product/productSlice";
 import "./Pagination.styles.scss";
+import PaginationItem from "./PaginationItem";
 
-const Pagination = () => {
+interface PaginationProps {
+  setPage: Dispatch<SetStateAction<number>>;
+  setPerPageHandler: (page: number) => void;
+  page: number;
+  perPage: number;
+}
+
+const PER_PAGE_INDEX = [10, 20, 50];
+
+const Pagination: React.FC<PaginationProps> = ({
+  setPage,
+  page,
+  setPerPageHandler,
+  perPage,
+}) => {
+  const total = useSelector(selectTotalProductCount);
+  const numberOfButton = Math.ceil(total / perPage);
+
+  const pageNumbers = Array.from({ length: numberOfButton }, (_, i) => i + 1);
+
+  const selectPerPageHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+    setPerPageHandler(Number(e.target.value));
+  };
+
+  const pageNumberClickHandler = (pageNumber: number) => {
+    setPage(pageNumber);
+  };
+
   return (
     <div className="pagination-container">
       <div className="per-page">
         <label htmlFor="page ratio">
-          <span>페이지 당 행: </span>
+          <span>페이지 당 행 : </span>
         </label>
-        <select>
-          <option>10</option>
-          <option>20</option>
-          <option>50</option>
+        <select onChange={selectPerPageHandler}>
+          {PER_PAGE_INDEX.map((pageIndex) => (
+            <option key={pageIndex} value={pageIndex}>
+              {pageIndex}
+            </option>
+          ))}
         </select>
       </div>
       <div className="pagination-buttons">
-        <button>&#10094;</button>
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>4</button>
-        <button> &#10095;</button>
+        <button
+          className="left-arrow"
+          onClick={() => setPage((prev) => prev - 1)}
+          disabled={page === 1}
+        >
+          &#10094;
+        </button>
+        <ul>
+          {pageNumbers.map((number) => (
+            <PaginationItem
+              key={number}
+              pageNumber={number}
+              pageClickHandler={() => pageNumberClickHandler(number)}
+            />
+          ))}
+        </ul>
+        <button
+          className="right-arrow"
+          onClick={() => setPage((prev) => prev + 1)}
+          disabled={page * perPage >= total}
+        >
+          &#10095;
+        </button>
       </div>
     </div>
   );

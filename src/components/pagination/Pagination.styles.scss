@@ -17,6 +17,9 @@
 
 .pagination-buttons {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 
   button {
     margin-right: 10px;
@@ -31,5 +34,8 @@
       background-color: #d9d9d9;
       border: 1px solid #c9c9c9;
     }
+  }
+  ul {
+    display: flex;
   }
 }
