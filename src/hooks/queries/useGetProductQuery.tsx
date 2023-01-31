@@ -6,6 +6,7 @@ const useProductQuery = () => {
     return useQuery({
       queryKey: ["Products"],
       queryFn: ProductService.getProduct,
+      staleTime: 5000,
     });
   };
 
