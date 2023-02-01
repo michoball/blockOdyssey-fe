@@ -14,3 +14,15 @@
     background: #000;
   }
 }
+
+.list-nothing {
+  height: 100%;
+  max-height: 50px;
+  padding: 5px 20px;
+
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #d1d1d1;
+
+  font-weight: 400;
+}
