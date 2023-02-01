@@ -1,8 +1,16 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+} from "react";
 import { useSelector } from "react-redux";
 import { selectTotalProductCount } from "../../features/product/productSlice";
-import "./Pagination.styles.scss";
+import useUrlSearch from "../../hooks/useUrlSearch";
 import PaginationItem from "./PaginationItem";
+
+import "./Pagination.styles.scss";
 
 interface PaginationProps {
   setPage: Dispatch<SetStateAction<number>>;
@@ -11,7 +19,7 @@ interface PaginationProps {
   perPage: number;
 }
 
-const PER_PAGE_INDEX = [10, 20, 50];
+const PER_PAGE_INDEX = [10, 20, 50] as const;
 
 const Pagination: React.FC<PaginationProps> = ({
   setPage,
@@ -19,20 +27,41 @@ const Pagination: React.FC<PaginationProps> = ({
   setPerPageHandler,
   perPage,
 }) => {
+  const selectRef = useRef<HTMLSelectElement>(null);
+  const { setSearchParams } = useUrlSearch();
   const productsCount = useSelector(selectTotalProductCount);
   const numberOfButton = Math.ceil(productsCount / perPage);
-
   const pageNumbers = Array.from({ length: numberOfButton }, (_, i) => i + 1);
 
   const selectPerPageHandler = (e: ChangeEvent<HTMLSelectElement>) => {
-    setPerPageHandler(Number(e.target.value));
+    const perPageValue = Number(e.target.value);
+    setPerPageHandler(perPageValue);
+  };
+
+  const arrowButtonClickHandler = (arrowDirection: "left" | "right") => {
+    if (arrowDirection === "left") {
+      setPage((prev) => prev - 1);
+      const newPage = page - 1;
+      setSearchParams({ page: String(newPage) });
+      return;
+    }
+    setPage((prev) => prev + 1);
+    const newPage = page + 1;
+    setSearchParams({ page: String(newPage) });
   };
 
   const pageNumberClickHandler = (pageNumber: number) => {
     setPage(pageNumber);
-    // 입력된 pageNumber url에 넣기
-    // ex) localhost:3000?여기에 search가 와야할듯/:pageNumber?pagePerRow=10
+    setSearchParams({ page: String(pageNumber) });
   };
+
+  // perPage 값이 바뀌면 select의 값도 바꿔줌
+  // 처음 들어왔을 때 perPageRow query를 읽어들이기 위한 부분
+  useEffect(() => {
+    if (selectRef.current) {
+      selectRef.current.value = String(perPage);
+    }
+  }, [perPage]);
 
   return (
     <div className="pagination-container">
@@ -40,7 +69,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <label htmlFor="page ratio">
           <span>페이지 당 행 : </span>
         </label>
-        <select onChange={selectPerPageHandler}>
+        <select onChange={selectPerPageHandler} ref={selectRef}>
           {PER_PAGE_INDEX.map((pageIndex) => (
             <option key={pageIndex} value={pageIndex}>
               {pageIndex}
@@ -48,13 +77,14 @@ const Pagination: React.FC<PaginationProps> = ({
           ))}
         </select>
       </div>
-      <div className="pagination-buttons">
+      <nav className="pagination-buttons">
         <button
           className="left-arrow"
-          onClick={() => setPage((prev) => prev - 1)}
+          onClick={arrowButtonClickHandler.bind(null, "left")}
+          value="left"
           disabled={page === 1}
         >
-          &#10094;
+          <span>&#10094;</span>
         </button>
         <ul>
           {pageNumbers.map((number) => (
@@ -67,12 +97,13 @@ const Pagination: React.FC<PaginationProps> = ({
         </ul>
         <button
           className="right-arrow"
-          onClick={() => setPage((prev) => prev + 1)}
+          value="right"
+          onClick={arrowButtonClickHandler.bind(null, "right")}
           disabled={page * perPage >= productsCount}
         >
-          &#10095;
+          <span>&#10095;</span>
         </button>
-      </div>
+      </nav>
     </div>
   );
 };

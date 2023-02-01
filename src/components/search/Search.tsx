@@ -1,6 +1,11 @@
-import React, { FormEvent, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../app/hooks";
-import { searchProducts } from "../../features/product/productSlice";
+import {
+  searchProducts,
+  selectProducts,
+} from "../../features/product/productSlice";
+import useUrlSearch from "../../hooks/useUrlSearch";
 import "./Search.styles.scss";
 import SearchDropdown from "./SearchDropdown";
 
@@ -25,6 +30,8 @@ export const SEARCH_CATEGORY = [
 
 const Search = () => {
   const dispatch = useAppDispatch();
+  const products = useSelector(selectProducts);
+  const { setSearchParams, getSearchParams } = useUrlSearch();
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedOption, setSelectedOption] = useState<SearchCategory>({
     condition: "total",
@@ -43,14 +50,40 @@ const Search = () => {
     const searchTerm = searchInputRef.current.value;
     const searchCategory = selectedOption.condition;
 
+    const encodedSearchTerm = encodeURIComponent(searchTerm);
+    setSearchParams({
+      category: searchCategory,
+      searchTerm: encodedSearchTerm,
+    });
+
     dispatch(searchProducts({ condition: searchCategory, searchTerm }));
-    // url에 search param으로 등록하기
-    // ex) ?category=brand&searchTerm=Samsung
   };
 
   const toggleDropdownHandler = () => {
     setIsDropDown(!isDropDown);
   };
+
+  useEffect(() => {
+    if (products) {
+      const categoryParam = getSearchParams("category");
+      const searchTermParam = getSearchParams("searchTerm");
+      if (categoryParam && searchTermParam) {
+        if (!searchInputRef.current) return;
+        searchInputRef.current.value = searchTermParam;
+        const name = Object.values(SEARCH_CATEGORY).filter(
+          (value) => value.condition === categoryParam
+        )[0].name;
+        setSelectedOption({ condition: categoryParam, name });
+
+        dispatch(
+          searchProducts({
+            condition: categoryParam,
+            searchTerm: searchTermParam,
+          })
+        );
+      }
+    }
+  }, [products, dispatch, getSearchParams]);
 
   return (
     <div className="search-container">

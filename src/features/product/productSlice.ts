@@ -30,7 +30,7 @@ export const ProductSlice = createSlice({
       const condition = action.payload.condition;
       const searchTerm = action.payload.searchTerm.trim().toLowerCase();
 
-      if (searchTerm.length === 0) {
+      if (!searchTerm.length) {
         state.searchedProducts = state.products;
         return;
       }
@@ -65,6 +65,10 @@ export const ProductSlice = createSlice({
 const selectProductsReducer = (state: RootState) => state.products;
 
 export const selectProducts = createSelector(
+  [selectProductsReducer],
+  (products) => products.products
+);
+export const selectSearchedProducts = createSelector(
   [selectProductsReducer],
   (products) => products.searchedProducts
 );
