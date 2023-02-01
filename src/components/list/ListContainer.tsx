@@ -1,26 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+
 import { Product } from "../../api/productService";
-import { selectProducts } from "../../features/product/productSlice";
+import { selectSearchedProducts } from "../../features/product/productSlice";
 import Pagination from "../pagination/Pagination";
 import ListView from "./ListView";
+import useUrlSearch from "../../hooks/useUrlSearch";
 
 import "./ListContainer.styles.scss";
 
 const ListContainer = () => {
-  const products = useSelector(selectProducts);
-
+  const products = useSelector(selectSearchedProducts);
+  const { setSearchParams, getSearchParams } = useUrlSearch();
   const [setProducts, setSetProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageValue, setPerPageValue] = useState(10);
 
   const perPageHandler = (perPage: number) => {
     setPerPageValue(perPage);
+
     // 전체 데이터 수 / 페이지 당 행의 수 가 현재 페이지보다 크면 현재 페이지 값 조정
-    const lastPageNumber = Math.ceil(setProducts.length / perPage);
+    let lastPageNumber = Math.ceil(setProducts.length / perPage);
     if (lastPageNumber < currentPage) {
+      const beforFirstProductNum = currentPage * perPageValue - perPageValue;
+      const afterFirstProductNum = lastPageNumber * perPage - perPage;
+      // 현재 페이지 제일 첫번째 값이 변경되는 페이지에 없을 경우
+      if (beforFirstProductNum < afterFirstProductNum) {
+        lastPageNumber--;
+      }
       setCurrentPage(lastPageNumber);
+      setSearchParams({
+        page: String(lastPageNumber),
+        pagePerRow: String(perPage),
+      });
+      return;
     }
+    setSearchParams({ pagePerRow: String(perPage) });
   };
 
   //현재 페이지에 보여질 product 배열
@@ -29,14 +44,23 @@ const ListContainer = () => {
     currentPage * perPageValue
   );
 
+  // 처음 페이지 진입 시 url search params 확인
   useEffect(() => {
     if (products) {
+      setSetProducts(products);
+      const pageValue = getSearchParams("page");
+      if (!pageValue) {
+        setSearchParams({ page: "1", pagePerRow: "10" });
+        return;
+      }
       // searchParams에 searchTerm이 있는지 확인하고 있으면 searchTerm의 값으로 search action 실행
       // 없으면 밑에처럼 진행
-      setSetProducts(products);
-      setCurrentPage(1);
+      const paramsPage = Number(getSearchParams("page"));
+      const paramsPerPageRow = Number(getSearchParams("pagePerRow"));
+      setCurrentPage(paramsPage);
+      setPerPageValue(paramsPerPageRow);
     }
-  }, [products]);
+  }, [products, setSearchParams, getSearchParams]);
 
   return (
     <>
