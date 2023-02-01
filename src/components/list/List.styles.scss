@@ -25,14 +25,8 @@
 
   .description {
     width: 31%;
-    display: flex;
-    justify-content: center;
-
-    div {
-      display: inline-block;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    }
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
