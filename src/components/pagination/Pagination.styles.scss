@@ -6,11 +6,13 @@
 }
 
 .per-page {
-  width: 120px;
+  width: 140px;
   label {
     font-size: 12px;
   }
   select {
+    font-size: 14px;
+    width: 30%;
     border: none;
   }
 }
@@ -20,6 +22,9 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  ul {
+    display: flex;
+  }
 
   button {
     margin-right: 10px;
@@ -34,8 +39,10 @@
       background-color: #d9d9d9;
       border: 1px solid #c9c9c9;
     }
-  }
-  ul {
-    display: flex;
+
+    &.disabled {
+      pointer-events: none;
+      color: #d1d1d1;
+    }
   }
 }
