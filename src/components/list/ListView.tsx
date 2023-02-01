@@ -20,20 +20,24 @@ const ListView: React.FC<ListViewProps> = ({ pagePerProducts }) => {
         <Spinner />
       ) : (
         <>
-          {pagePerProducts.map((product) => {
-            return (
-              <List
-                key={product.title}
-                productTitle={product.title}
-                productId={product.id}
-                brand={product.brand}
-                description={product.description}
-                price={product.price}
-                rating={product.rating}
-                stock={product.stock}
-              />
-            );
-          })}
+          {pagePerProducts.length === 0 ? (
+            <li className="list-nothing">검색 결과가 없습니다.</li>
+          ) : (
+            pagePerProducts.map((product) => {
+              return (
+                <List
+                  key={product.title}
+                  productTitle={product.title}
+                  productId={product.id}
+                  brand={product.brand}
+                  description={product.description}
+                  price={product.price}
+                  rating={product.rating}
+                  stock={product.stock}
+                />
+              );
+            })
+          )}
         </>
       )}
     </div>
