@@ -19,11 +19,21 @@ npm run start
 # http://localhost:3000
 ```
 
+## 과제 진행 시 주안점 
+---
+
+
+## 사용 프레임 워크 및 라이브러리
+---
+
+- react-query  : 
+- redux-toolkit : 
+
+
 ## 구현 요구사항 목록
 
 ### List
 ---
-
 
 - [x] It should be a search result list.
 - [x] After page refresh, the search result should persist.
@@ -31,7 +41,7 @@ npm run start
 - [x] Display the total amount of data at the top of the list.
 - [x] The maximum length of [상품내용] is 40 characters. If it exceeds the maximum length, you should display the rest of the content using ellipsis ....
 
-> 구현시 생각한 것 적기
+> 구현시 생각한 것 적기 및 시연 영상찍기
 
 
  ### Search
@@ -50,11 +60,6 @@ npm run start
 
 구현시 생각한 것 적기
 
-## 사용 프레임 워크 및 라이브러리
----
-
-- react-query  : 
-- redux-toolkit : 
 
 ## SRC 폴더 구조
 ---
@@ -103,11 +108,7 @@ src
 ```
 
 
- 
-## 과제 진행 시 주안점 
----
-
-
+인적사항
 ---
 
 이름 – 강명훈 
