@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/blockOdyssey-fe/static/css/main.ba566a0d.css",
+    "main.js": "/blockOdyssey-fe/static/js/main.3ba0e4b8.js",
+    "static/media/spinner.gif": "/blockOdyssey-fe/static/media/spinner.a1a996746e5e48352c81.gif",
+    "index.html": "/blockOdyssey-fe/index.html",
+    "main.ba566a0d.css.map": "/blockOdyssey-fe/static/css/main.ba566a0d.css.map",
+    "main.3ba0e4b8.js.map": "/blockOdyssey-fe/static/js/main.3ba0e4b8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ba566a0d.css",
+    "static/js/main.3ba0e4b8.js"
+  ]
+}
