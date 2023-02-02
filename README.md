@@ -36,8 +36,12 @@ npm run start
    - 제공된 이미지와 최대한 비슷하게 구현이 되도록 코드를 짜는 것을 우선으로 했습니다. 
    
 2. 가독성
-   - 코드의 가독성을 좋게 하기 위해 관심사를 계속 분리하려 했습니다.  searchParams 세팅을 커스텀 훅으로 빼고 UI 관련 컴포넌트에서는 UI 외 다른 코드는 없도록 노력했습니다.  
+   - 코드의 가독성을 좋게 하기 위해 관심사를 계속 분리하려 했습니다.  
+   - searchParams 세팅을 커스텀 훅으로 빼고 UI 관련 컴포넌트에서는 UI 외 다른 코드는 없도록 노력했습니다.  
 
+3. 라이브러리 사용
+   - react query를 처음 data를 fetching 할 때만 사용하고 있어서 사용할 필요성에 대해 고민했습니다. 
+   - 하지만 react query를 사용함으로써 redux가 오직 app 안의 data 상태에만 집중할 수 있다고 생각되어 사용하게 되었습니다.   
 
 
 ## 구현 요구사항 목록
@@ -97,6 +101,16 @@ Search 시연 영상
     Search params에 값을 넣는 부분이 여러 컴포넌트에 걸쳐있어서 따로 커스텀 훅을 만들어 관리했습니다.
 
 
+## 개선 사항
+
+- Pagination 기능을 커스텀 훅으로 빼면 좋을 것 같아서 시도하고 있습니다.
+
+- Search 기능에 사용되는 상수를 type assertion하여 사용하는 쪽으로 개선하려 합니다.
+
+- Product slice의 searchProduct action의 가독성이 떨어지는 것 같습니다. search condition에 따른 값을 if else if 로 구분하여 값을 설정하는데 else if 문이 많아 가독성이 떨어지는 것 같습니다. switch문이다 다른 방식으로 바꾸는 것을 고려하고 있습니다. 
+
+> redux-persist나 localStorage의 도움없이 상태를 유지하는 부분을 따로 생각하고 있지 않았는데 이번 기회에 많이 알아보게 되었습니다.  
+
 ## 폴더 구조
 
 ```
@@ -143,14 +157,6 @@ src
  ┗ 📜setupTests.ts
 ```
 
-## 개선 사항
-
-
-- Pagination 기능을 커스텀 훅으로 빼면 좋을 것 같아서 시도하고 있습니다.
-
-- Search 기능에 사용되는 상수를 type assertion하여 사용하는 쪽으로 개선하려 합니다.
-
-- Product slice의 searchProduct action의 가독성이 떨어지는 것 같습니다. search condition에 따른 값을 if else if 로 구분하여 값을 설정하는데 else if 문이 많아 가독성이 떨어지는 것 같습니다. switch문이다 다른 방식으로 바꾸는 것을 고려하고 있습니다. 
 
 
 ## 인적사항
