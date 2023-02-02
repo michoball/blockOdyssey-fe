@@ -12,7 +12,7 @@ interface ListViewProps {
 
 const ListView: React.FC<ListViewProps> = ({ pagePerProducts }) => {
   const { useGetAllProductQuery } = useProductQuery();
-  const { isLoading } = useGetAllProductQuery();
+  const { isLoading, isError, error } = useGetAllProductQuery();
 
   return (
     <div className="list-view">
@@ -39,6 +39,9 @@ const ListView: React.FC<ListViewProps> = ({ pagePerProducts }) => {
             })
           )}
         </>
+      )}
+      {isError && error instanceof Error && (
+        <div className="error-message">{error.message}</div>
       )}
     </div>
   );
