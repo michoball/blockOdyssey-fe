@@ -45,6 +45,10 @@ npm run start
    - react query를 처음 data를 fetching 할 때만 사용하고 있어서 사용할 필요성에 대해 고민했습니다. 
    - 하지만 react query를 사용함으로써 redux가 오직 app 안의 data 상태에만 집중할 수 있다고 생각되어 사용하게 되었습니다.   
 
+4. 작업 방식
+   - git flow 와 비슷하게 feature 브랜치로 브랜치를 분기하여 기능별로 구현 후 PR을 보내 merge 하는 방식으로 진행하려 노력했습니다.
+   - 고민되는 사항이나 의문이 있어서 나중에 하려고 했던 기능은 issue에 따로 기록하고 해결하면 PR과 함께 issue resolve하는 방식으로 진행했습니다. 
+
 
 ## 구현 요구사항 목록
 
