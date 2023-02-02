@@ -6,7 +6,6 @@
 <img alt="redux-toolkit" src="https://img.shields.io/badge/React redux-v8.0.5-764ABC?style=plastic&logo=redux&logoColor=white"/>
 <img alt="React-Query" src="https://img.shields.io/badge/React Query-v4.22.4-FF4154?style=plastic&logo=reactquery&logoColor=white"/>
 <img alt="Sass" src="https://img.shields.io/badge/Sass-v1.57.1-CC6699?style=plastic&logo=sass&logoColor=white"/>
-
 </p>
 
 ## 실행 방법
@@ -18,6 +17,9 @@ npm install
 npm run start
 # http://localhost:3000
 ```
+
+ [배포 사이트](https://michoball.github.io/blockOdyssey-fe/)
+
 
 ## 목록
 
