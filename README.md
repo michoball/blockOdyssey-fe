@@ -21,30 +21,29 @@ npm run start
 
 ## 목록
 
-- [과제 진행 시 주안점](#과제진행-주안점)<br/>
-- [사용 프레임 워크 및 라이브러리](#사용-프레임워크-및-라이브러리)<br/>
+- [과제 진행 시 주안점](#과제진행-시-주안점)<br/>
 - [구현 요구사항 목록](#구현-요구사항-목록)<br/>
 - [SRC 폴더 구조](#폴더-구조)<br/>
-- [인적사항](#인적사항)<br/>
 - [개선 사항](#개선-사항)<br/>
+- [인적사항](#인적사항)<br/>
 
 
 
-## 과제진행 주안점 
----
+## 과제진행 시 주안점 
 
 
-## 사용 프레임워크 및 라이브러리
----
+1. 주어진 과제를 완성도 있게 구현하고자 노력했습니다. 
+   - 제공된 이미지와 최대한 비슷하게 구현이 되도록 코드를 짜는 것을 우선으로 했습니다. 
+   
+2. 가독성
+   - 코드의 가독성을 좋게 하기 위해 관심사를 계속 분리하려 했습니다.  searchParams 세팅을 커스텀 훅으로 빼고 UI 관련 컴포넌트에서는 UI 외 다른 코드는 없도록 노력했습니다.  
 
-- react-query  : 
-- redux-toolkit : 
 
 
 ## 구현 요구사항 목록
 
 ### List
----
+
 
 - [x] It should be a search result list.
 - [x] After page refresh, the search result should persist.
@@ -52,28 +51,54 @@ npm run start
 - [x] Display the total amount of data at the top of the list.
 - [x] The maximum length of [상품내용] is 40 characters. If it exceeds the maximum length, you should display the rest of the content using ellipsis ....
 
-> 구현시 생각한 것 적기 및 시연 영상찍기
+
+List 및 Pagination 시연 영상
+
+![list-part](https://user-images.githubusercontent.com/79836148/216230784-07184d76-ed02-4add-a464-9bc91f068936.gif)
 
 
  ### Search
----
+
 
 - [x] Search conditions are the following : [전체, 상품명, 브랜드, 상품내용].
 - [x] Both search condition and keyword must be persisted after the refresh.
 
-구현시 생각한 것 적기
+
+Search 시연 영상
+
+![search-part](https://user-images.githubusercontent.com/79836148/216230884-9b4e3289-ab10-4d35-8926-5cd71cf45aa3.gif)
+
 
  ### Pagination
----
+
 
 - [x] Implement rows per page using a select box. The select box should display [10, 20, 50] options.
 - [x] Both rows per page and page number must be persisted after the refresh.
 
-구현시 생각한 것 적기
+
+## 구현 고려사항
+
+
+### List
+
+* 페이지 당 행에 따른 리스트의 길이가 길어져 전체 화면이 길어지는 부분
+
+  - overflow-y : auto; 를 주어서 리스트 화면안에서 스크롤되게 구현하였습니다.
+  
+* 40글자가 넘어가면 ellipsis 효과를 주는 부분  ( 이슈 Using ellipsis question #2 )
+
+  - text-overflow : ellipsis 는 width가 정해져야 설정이 적용되는 것으로 알고 있습니다. 그래서 받아온 **상품내용** 의 글자 길이를 기반으로 동적으로 width를 정해주려 했으나 
+    재 설정된 width는 실제 40글자의 width라 원하는대로 적용되지 않았습니다. 그래서 **상품내용**에 width를 %로 설정하고 40글자가 넘어가는 상품내용은 slice로 잘라서 보여주는 것으로 했습니다.  
+
+### 검색 기록 유지
+
+*  redux-persist 와 localStorage 를 사용하지 않고 data기록을 유지하는 부분
+   - 현재 페이지 번호, 페이지 당 행 값, 검색 카테고리 그리고 검색어 를 url의 search params로 넣어서 유지할 수 있도록 했습니다. 
+    Search params에 값을 넣는 부분이 여러 컴포넌트에 걸쳐있어서 따로 커스텀 훅을 만들어 관리했습니다.
 
 
 ## 폴더 구조
----
+
 ```
 src
  ┣ 📂api
@@ -119,11 +144,17 @@ src
 ```
 
 ## 개선 사항
----
+
+
+- Pagination 기능을 커스텀 훅으로 빼면 좋을 것 같아서 시도하고 있습니다.
+
+- Search 기능에 사용되는 상수를 type assertion하여 사용하는 쪽으로 개선하려 합니다.
+
+- Product slice의 searchProduct action의 가독성이 떨어지는 것 같습니다. search condition에 따른 값을 if else if 로 구분하여 값을 설정하는데 else if 문이 많아 가독성이 떨어지는 것 같습니다. switch문이다 다른 방식으로 바꾸는 것을 고려하고 있습니다. 
 
 
 ## 인적사항
----
+
 
 이름 – 강명훈 
 
