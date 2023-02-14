@@ -1,6 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IProducts, Product } from "../../api/productService";
 import { RootState } from "../../app/store";
+import { CategoryConditionType } from "../../components/search/Search";
 
 interface ProductState {
   total: number;
@@ -26,9 +27,7 @@ export const ProductSlice = createSlice({
     searchProducts: (
       state,
       action: PayloadAction<{
-        condition:
-          | keyof Pick<Product, "brand" | "description" | "title">
-          | "total";
+        condition: CategoryConditionType;
         searchTerm: string;
       }>
     ) => {
