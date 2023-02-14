@@ -10,15 +10,12 @@ import useUrlSearch from "../../hooks/useUrlSearch";
 import "./Search.styles.scss";
 import SearchDropdown from "./SearchDropdown";
 
-export const SEARCH_CONDITION = {
-  total: "total",
-  title: "title",
-  brand: "brand",
-  description: "description",
-};
+export type CategoryConditionType =
+  | keyof Pick<Product, "brand" | "description" | "title">
+  | "total";
 
 export interface SearchCategory {
-  condition: keyof Pick<Product, "brand" | "description" | "title"> | "total";
+  condition: CategoryConditionType;
   name: string;
 }
 
@@ -68,10 +65,10 @@ const Search = () => {
 
   useEffect(() => {
     if (products) {
-      const categoryParam = getSearchParams("category") as
-        | keyof Pick<Product, "brand" | "description" | "title">
-        | "total"
-        | null;
+      const categoryParam = getSearchParams(
+        "category"
+      ) as CategoryConditionType | null;
+      // assertion 말고 다른 방식 없을까...?
       const searchTermParam = getSearchParams("searchTerm");
       if (categoryParam && searchTermParam) {
         if (!searchInputRef.current) return;
@@ -79,8 +76,8 @@ const Search = () => {
         const name = Object.values(SEARCH_CATEGORY).filter(
           (value) => value.condition === categoryParam
         )[0].name;
-        setSelectedOption({ condition: categoryParam, name });
 
+        setSelectedOption({ condition: categoryParam, name });
         dispatch(
           searchProducts({
             condition: categoryParam,
