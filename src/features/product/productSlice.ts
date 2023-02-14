@@ -14,6 +14,8 @@ export const initialState: ProductState = {
   searchedProducts: [],
 };
 
+const conditionProduct = (condiion: keyof Product) => {};
+
 export const ProductSlice = createSlice({
   name: "product",
   initialState,
@@ -27,13 +29,25 @@ export const ProductSlice = createSlice({
       state,
       action: PayloadAction<{ condition: string; searchTerm: string }>
     ) => {
-      const condition = action.payload.condition;
-      const searchTerm = action.payload.searchTerm.trim().toLowerCase();
+      const { condition, searchTerm } = action.payload;
+      searchTerm.trim().toLowerCase();
 
       if (!searchTerm.length) {
         state.searchedProducts = state.products;
         return;
       }
+
+      if (condition === "total") {
+        // 여기서 total경우 따로 설정
+      }
+      //condiion에 따른 값 if가 아닌 다르게 나타낼 수 있을 것 같은데...
+      // condition을 Pick<Product, 'brand' | 'desc' | 'title > 과 비슷하게 가야할 듯
+      // state.products.forEach((product) => {
+      //   Object.keys(product).filter((name) => name === condition)
+      //   if (condition === "total") return
+      //   return product[condition].toLowerCase().includes(searchTerm);
+      // });
+
       let newSearchedProducts: Product[] = [];
 
       if (condition === "brand") {
