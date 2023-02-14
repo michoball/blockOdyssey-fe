@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { Product } from "../../api/productService";
 import { useAppDispatch } from "../../app/hooks";
 import {
   searchProducts,
@@ -9,23 +10,20 @@ import useUrlSearch from "../../hooks/useUrlSearch";
 import "./Search.styles.scss";
 import SearchDropdown from "./SearchDropdown";
 
-export const SEARCH_CONDITION = {
-  total: "total",
-  title: "title",
-  brand: "brand",
-  description: "description",
-};
+export type CategoryConditionType =
+  | keyof Pick<Product, "brand" | "description" | "title">
+  | "total";
 
 export interface SearchCategory {
-  condition: string;
+  condition: CategoryConditionType;
   name: string;
 }
 
-export const SEARCH_CATEGORY = [
-  { condition: SEARCH_CONDITION.total, name: "전체" },
-  { condition: SEARCH_CONDITION.title, name: "상품명" },
-  { condition: SEARCH_CONDITION.brand, name: "브랜드" },
-  { condition: SEARCH_CONDITION.description, name: "상품내용" },
+export const SEARCH_CATEGORY: SearchCategory[] = [
+  { condition: "total", name: "전체" },
+  { condition: "title", name: "상품명" },
+  { condition: "brand", name: "브랜드" },
+  { condition: "description", name: "상품내용" },
 ];
 
 const Search = () => {
@@ -67,7 +65,10 @@ const Search = () => {
 
   useEffect(() => {
     if (products) {
-      const categoryParam = getSearchParams("category");
+      const categoryParam = getSearchParams(
+        "category"
+      ) as CategoryConditionType | null;
+      // assertion 말고 다른 방식 없을까...?
       const searchTermParam = getSearchParams("searchTerm");
       if (categoryParam && searchTermParam) {
         if (!searchInputRef.current) return;
@@ -75,8 +76,8 @@ const Search = () => {
         const name = Object.values(SEARCH_CATEGORY).filter(
           (value) => value.condition === categoryParam
         )[0].name;
-        setSelectedOption({ condition: categoryParam, name });
 
+        setSelectedOption({ condition: categoryParam, name });
         dispatch(
           searchProducts({
             condition: categoryParam,
