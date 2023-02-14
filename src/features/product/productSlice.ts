@@ -27,7 +27,12 @@ export const ProductSlice = createSlice({
     },
     searchProducts: (
       state,
-      action: PayloadAction<{ condition: string; searchTerm: string }>
+      action: PayloadAction<{
+        condition:
+          | keyof Pick<Product, "brand" | "description" | "title">
+          | "total";
+        searchTerm: string;
+      }>
     ) => {
       const { condition, searchTerm } = action.payload;
       searchTerm.trim().toLowerCase();
@@ -42,11 +47,11 @@ export const ProductSlice = createSlice({
       }
       //condiion에 따른 값 if가 아닌 다르게 나타낼 수 있을 것 같은데...
       // condition을 Pick<Product, 'brand' | 'desc' | 'title > 과 비슷하게 가야할 듯
-      // state.products.forEach((product) => {
-      //   Object.keys(product).filter((name) => name === condition)
-      //   if (condition === "total") return
-      //   return product[condition].toLowerCase().includes(searchTerm);
-      // });
+      state.products.forEach((product) => {
+        Object.keys(product).filter((name) => name === condition);
+        if (condition === "total") return;
+        return product[condition].toLowerCase().includes(searchTerm);
+      });
 
       let newSearchedProducts: Product[] = [];
 
