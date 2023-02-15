@@ -51,7 +51,7 @@ const Search = () => {
     const encodedSearchTerm = encodeURIComponent(searchTerm);
     setSearchParams({
       page: "1",
-      perPageRow: "10",
+      pagePerRow: "10",
       category: searchCategory,
       searchTerm: encodedSearchTerm,
     });
