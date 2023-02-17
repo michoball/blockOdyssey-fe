@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Product } from "../api/productService";
 
 // useUrlSearch hook부분은 빼야할 듯
-const usePaginate = () => {
+const usePaginate = (products: Product[]) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageValue, setPerPageValue] = useState(10);
 
   // products 리스트 parameter로 넘기기
-  const perPageHandler = (perPage: number, products: Product[]) => {
+  const perPageValueHandler = (perPage: number) => {
     // 전체 데이터 수 / 페이지 당 행의 수 가 현재 페이지보다 크면 현재 페이지 값 조정
     let lastPageNumber = Math.ceil(products.length / perPage);
     if (lastPageNumber < currentPage) {
@@ -17,18 +17,26 @@ const usePaginate = () => {
       if (beforFirstProductNum < afterFirstProductNum) {
         lastPageNumber--;
       }
-      setCurrentPage(lastPageNumber);
+      return lastPageNumber;
     }
-    setPerPageValue(perPage);
-    return lastPageNumber;
   };
+
+  const currentPageProducts = useMemo(
+    () =>
+      products?.slice(
+        currentPage * perPageValue - perPageValue,
+        currentPage * perPageValue
+      ),
+    [currentPage, perPageValue, products]
+  );
 
   return {
     currentPage,
     perPageValue,
     setCurrentPage,
     setPerPageValue,
-    perPageHandler,
+    perPageValueHandler,
+    currentPageProducts,
   };
 };
 
