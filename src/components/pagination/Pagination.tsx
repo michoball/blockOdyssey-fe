@@ -30,7 +30,6 @@ const Pagination: React.FC<PaginationProps> = ({
   perPage,
 }) => {
   const { setSearchParams } = useUrlSearch();
-
   const selectRef = useRef<HTMLSelectElement>(null);
   const productsCount = useSelector(selectTotalProductCount);
   const numberOfButton = Math.ceil(productsCount / perPage);
@@ -50,10 +49,10 @@ const Pagination: React.FC<PaginationProps> = ({
     if (arrowDirection === "left") {
       setPage((prev) => prev - 1);
       setSearchParams({ page: String(page - 1) });
-      return;
+    } else {
+      setPage((prev) => prev + 1);
+      setSearchParams({ page: String(page + 1) });
     }
-    setPage((prev) => prev + 1);
-    setSearchParams({ page: String(page + 1) });
   };
 
   const pageNumberClickHandler = (pageNumber: number) => {
@@ -71,11 +70,10 @@ const Pagination: React.FC<PaginationProps> = ({
 
   // pagination button에 ... 효과 넣어주기
   useEffect(() => {
-    let tempNumberOfPages: (number | string)[] = [...pageNumbers];
-    // tempNumberOfPages 길이가 다음보다 작으면 밑의 작업이 의미없다고 판단하여 tempNumberOfPages값을 넣고 리턴
-    if (tempNumberOfPages.length < 8)
-      return setArrayOfButton(tempNumberOfPages);
+    // pageNumbers 길이가 다음보다 작으면 밑의 작업이 의미없다고 판단하여 pageNumbers값을 넣고 리턴
+    if (pageNumbers.length < 8) return setArrayOfButton(pageNumbers);
 
+    let tempNumberOfPages: (number | string)[] = [...pageNumbers];
     // 현재 page에 따른 pagination button 값
     if (page <= 4) {
       tempNumberOfPages = [
